@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm install *)",
+      "Bash(mkdir -p \"c:/laragon/www/OneRdfV2Frontend/src/assets/animations\" \\\\ *)",
+      "Bash(npx shadcn@latest add button input label card form dialog dropdown-menu sonner skeleton avatar separator badge -y)",
+      "Bash(cd \"c:/laragon/www/OneRdfV2Frontend\" && mv \"@/components/ui\"/*.tsx \"src/components/ui/\" && rm -rf \"@\" && ls src/components/ui)",
+      "Bash(npx tsc *)",
+      "Bash(npm run *)"
+    ],
+    "additionalDirectories": [
+      "c:\\laragon\\www\\OneRdfV2Frontend\\src\\assets",
+      "C:\\laragon\\www\\OneRdfV2Frontend\\@\\components\\ui"
+    ]
+  }
+}
