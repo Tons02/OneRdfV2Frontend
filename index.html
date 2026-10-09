@@ -4,7 +4,16 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>onerdfv2frontend</title>
+    <title>One RDF</title>
+    <!-- Apply the saved theme before first paint (no light/dark flash).
+         Key must match STORAGE_KEYS.theme in src/lib/constants.ts. -->
+    <script>
+      try {
+        var t = localStorage.getItem('onerdf-theme')
+        if (t === 'dark' || ((t !== 'light') && matchMedia('(prefers-color-scheme: dark)').matches))
+          document.documentElement.classList.add('dark')
+      } catch (e) {}
+    </script>
   </head>
   <body>
     <div id="root"></div>

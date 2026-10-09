@@ -1,28 +1,32 @@
-import { useState } from 'react'
+import { useRef } from 'react'
 import { toast } from 'sonner'
-import { useAppDispatch } from '@/hooks/useAppDispatch'
-import { setCredentials } from '@/store/slices/authSlice'
-import { authService } from '../services/authService'
-import type { LoginFormValues } from '../schemas/loginSchema'
+import { useAppDispatch } from '@/app/store/hooks'
+import { setCredentials } from '../store/authSlice'
+import { useLoginMutation } from '../api/authApi'
+import type { LoginRequest } from '../types/auth.types'
 
 export function useLogin() {
   const dispatch = useAppDispatch()
-  const [isLoading, setIsLoading] = useState(false)
+  const [loginMutation, { isLoading, error }] = useLoginMutation()
+  // isLoading only flips after a re-render; this blocks a second submit
+  // (e.g. two Enter presses) that arrives before then.
+  const inFlight = useRef(false)
 
-  const login = async (values: LoginFormValues) => {
-    setIsLoading(true)
+  const login = async (values: LoginRequest) => {
+    if (inFlight.current) return false
+    inFlight.current = true
     try {
-      const { user, token } = await authService.login(values)
+      const { token, data: user } = await loginMutation(values).unwrap()
       dispatch(setCredentials({ user, token }))
-      toast.success('Signed in successfully')
+      toast.success(`Welcome back, ${user.first_name}.`)
       return true
     } catch {
-      toast.error('Invalid email or password')
+      // Error is exposed via `error` for the form to render inline.
       return false
     } finally {
-      setIsLoading(false)
+      inFlight.current = false
     }
   }
 
-  return { login, isLoading }
+  return { login, isLoading, error }
 }
